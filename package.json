@@ -1,7 +1,7 @@
 {
-  "name": "microservice",
+  "name": "node-microservices",
   "version": "1.0.0",
-  "description": "Microservice framework with node.js",
+  "description": "Microservices framework with node.js",
   "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -13,7 +13,8 @@
   "keywords": [
     "node",
     "nodejs",
-    "microservice",
+		"microservice",
+    "microservices",
     "tcp"
   ],
   "author": "nauma <Roman Naumenko-Vahnitsky>",

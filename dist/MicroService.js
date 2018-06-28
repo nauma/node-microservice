@@ -2,8 +2,7 @@ const Server = require('./Server')
 
 class Microservice {
 	constructor (name, config = {}) {
-		config.server = config.server || { host: '0.0.0.0', port: 9250 }
-		config.connections = config.connections || []
+		config = config || { host: '0.0.0.0', port: 9250 }
 
 		this.name = name
 		this.config = config
@@ -21,7 +20,7 @@ class Microservice {
 	}
 
 	runServer () {
-		this.server = new Server(this.config.server)
+		this.server = new Server(this.config)
 
 		this.server.on('connect', socket => {
 			if (!socket.__id__) socket.__id__ = this.getHash()
@@ -39,6 +38,11 @@ class Microservice {
 					clientHandler.setSocket(socket)
 					clientHandler.send('__register_success__', {})
 					clientHandler.events.connect.map(event => event())
+				} else {
+					this.clientsHandlers[socket.__name__] = new ConnectHandler(socket.__name__)
+					let clientHandler = this.clientsHandlers[socket.__name__]
+					clientHandler.setSocket(socket)
+					clientHandler.send('__register_success__', {})
 				}
 			} else {
 				let clientHandler = this.clientsHandlers[socket.__name__]

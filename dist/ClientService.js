@@ -34,6 +34,11 @@ class Clientservice {
 						let handler = this.connectionsHandler[clientName]
 						handler.setSocket(client)
 						handler.events.connect.map(event => event())
+					} else {
+						this.connectionsHandler[clientName] = new ClientHandler(clientName)
+						let handler = this.connectionsHandler[clientName]
+						handler.setSocket(client)
+						handler.send('__register_success__', {})
 					}
 
 				} else {
