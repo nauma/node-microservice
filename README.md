@@ -7,13 +7,13 @@ Size: 11.6 Kb
 # install
 
 ```js
-npm i node-microservices --save
+npm i @nauma/node-microservice --save
 ```
 
 # using
 ### require
 ```js
-const ms = require('node-microservices')
+const ms = require('@nauma/node-microservice')
 ```
 
 ### create Microservice(server)
