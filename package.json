@@ -1,7 +1,7 @@
 {
-  "name": "node-microservices",
+  "name": "@nauma/node-microservice",
   "version": "1.0.0",
-  "description": "Microservices framework with node.js",
+  "description": "Using microservices in node.js",
   "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -11,11 +11,12 @@
     "url": "git+https://github.com/nauma/node-microservice.git"
   },
   "keywords": [
+    "microservice",
     "node",
-    "nodejs",
-		"microservice",
+    "node-microservice",
     "microservices",
-    "tcp"
+    "tcp",
+    "rest"
   ],
   "author": "nauma <Roman Naumenko-Vahnitsky>",
   "license": "ISC",
