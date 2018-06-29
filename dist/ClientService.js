@@ -74,6 +74,10 @@ class Clientservice {
 					clientHandler.events.disconnect.map(event => event())
 				}
 			})
+
+			client.on('error', () => {
+				console.log(`${this.name} error! Reconnecting...`)
+			})
 		})
 	}
 

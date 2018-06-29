@@ -46,7 +46,6 @@ class Client {
 
 		this.connection.on('error', error => {
 			this.events.error.map(event => event(error))
-			console.log(error)
 
 			// reconnecting
 			setTimeout(() => {
