@@ -77,7 +77,7 @@ class Clientservice {
 			})
 
 			client.on('error', () => {
-				console.log(`${this.name} error! Reconnecting...`)
+				console.log(`Clientservice '${this.name}' error! Reconnecting...`)
 			})
 		})
 	}
