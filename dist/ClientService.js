@@ -41,7 +41,7 @@ class Clientservice {
 						handler.send('__register_success__', {})
 					}
 
-					console.log(`Client '${this.name}' regiter to '${clientName}' success!`)
+					console.log(`Clientservice '${this.name}' register to '${clientName}' success!`)
 				} else {
 					if (this.connectionsHandler[clientName]) {
 						let handler = this.connectionsHandler[clientName]
