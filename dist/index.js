@@ -1,11 +1,11 @@
 const Server = require('./Server')
 const Client = require('./Client')
-const Microservice = require('./Microservice')
-const Clientservice = require('./Clientservice')
+const Serverservice = require('./ServerService')
+const Clientservice = require('./ClientService')
 
 module.exports = {
 	Server,
 	Client,
-	Microservice,
-	Clientservice
+	Serverservice,
+	Clientservice,
 }

@@ -1,6 +1,6 @@
 const Client = require('./Client')
 
-class Clientservice {
+module.exports = class Clientservice {
 	constructor (name, config = []) {
 		this.name = name
 		this.config = config
@@ -13,9 +13,9 @@ class Clientservice {
 
 	runConnect () {
 		this.config.map(address => {
-			let clientName = address.split('@')[0]
-			let clientHost = address.split('@')[1].split(':')[0]
-			let clientPort = address.split('@')[1].split(':')[1]
+			let clientName = address.name
+			let clientHost = address.host
+			let clientPort = address.port
 
 			let client = this.connections[clientName]
 			client = new Client({ host: clientHost, port: clientPort })
@@ -41,22 +41,22 @@ class Clientservice {
 						handler.send('__register_success__', {})
 					}
 
-					console.log(`Clientservice '${this.name}' register to '${clientName}' success!`)
+					console.log(`ClientService '${this.name}' register to ServerService '${clientName}' success!`)
 				} else {
 					if (this.connectionsHandler[clientName]) {
 						let handler = this.connectionsHandler[clientName]
-						if(result.clientHash) {
+						if (result.clientHash) {
 							handler.events.send.map((event, index) => {
-								if(event.clientHash === result.clientHash) {
+								if (event.clientHash === result.clientHash) {
 									handler.events.send.splice(index, 1)
 									event.callback(result.data)
 								}
 							})
 						} else {
 							handler.events.data.map((event, index) => {
-								if(event.type === result.type) {
-									if(result.serverHash) {
-										 event.callback(new ReplyHandler(result, client))
+								if (event.type === result.type) {
+									if (result.serverHash) {
+										event.callback(new ReplyHandler(result, client))
 									} else {
 										event.callback({ result: result.data })
 									}
@@ -70,6 +70,7 @@ class Clientservice {
 
 			client.on('disconnect', () => {
 				let clientHandler = this.connectionsHandler[clientName]
+				
 				if (clientHandler) {
 					clientHandler.setSocket(null)
 					clientHandler.events.disconnect.map(event => event())
@@ -77,7 +78,7 @@ class Clientservice {
 			})
 
 			client.on('error', () => {
-				console.log(`Clientservice '${this.name}' error! Reconnecting...`)
+				console.log(`ClientService '${this.name}' error! Reconnecting...`)
 			})
 		})
 	}
@@ -87,7 +88,7 @@ class Clientservice {
 			this.connectionsHandler[name] = new ClientHandler(name)
 		}
 
-		if(callback) {
+		if (callback) {
 			callback(this.connectionsHandler[name])
 			return this
 		} else {
@@ -96,13 +97,16 @@ class Clientservice {
 	}
 
 	send (name, type, data = {}, callback = null) {
-		if(!this.clientsHandlers[name]) throw new Error(`Server '${name}' not found`)
+		if (!this.clientsHandlers[name]) {
+			throw new Error(`Server '${name}' not found`)
+		}
+		// 
 		this.connectionsHandler[name].send(type, data, callback)
 	}
 }
 
 class ClientHandler {
-	constructor(name) {
+	constructor (name) {
 		this.name = name
 		this.socket = null
 		this.events = {
@@ -115,25 +119,30 @@ class ClientHandler {
 
 	setSocket (socket) {
 		this.socket = socket
+		// 
+		return this
 	}
 
 	open (callback) {
 		this.events.connect.push(callback)
+		// 
 		return this
 	}
 
 	close (callback) {
 		this.events.disconnect.push(callback)
+		// 
 		return this
 	}
 
 	on (type, callback) {
 		this.events.data.push({ type, callback })
+		// 
 		return this
 	}
 
 	send (type, data, callback = null) {
-		if(!this.socket) {
+		if (!this.socket) {
 			console.error(`Dont set socket in '${this.name}'`)
 		}
 
@@ -142,7 +151,7 @@ class ClientHandler {
 			data
 		}
 
-		if(callback) {
+		if (callback) {
 			let clientHash = this.getHash()
 
 			this.events.send.push({
@@ -153,13 +162,12 @@ class ClientHandler {
 			send.clientHash = clientHash
 		}
 
-
 		this.socket.send(send)
 
 		return this
 	}
 
-	getHash (min = 10000000, max = 90000000) {
+	getHash (min = 10000000, max = 999999999) {
 		return Math.floor(Math.random() * (max - min)) + min;
 	}
 }
@@ -181,5 +189,3 @@ class ReplyHandler {
 		})
 	}
 }
-
-module.exports = Clientservice

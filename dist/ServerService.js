@@ -1,9 +1,7 @@
 const Server = require('./Server')
 
-class Microservice {
+module.exports = class Serverservice {
 	constructor (name, config = {}) {
-		config = config || { host: '0.0.0.0', port: 9250 }
-
 		this.name = name
 		this.config = config
 
@@ -27,11 +25,11 @@ class Microservice {
 		})
 
 		this.server.on('data', (result, socket) => {
-			if(result.type === '__register_client__') {
+			if (result.type === '__register_client__') {
 				socket.__name__ = result.data.name
 				this.serverClients.push(socket)
 
-				console.log(`Microservice '${this.name}' → register '${socket.__name__}' client!`)
+				console.log(`ServerService '${this.name}' → register ClientService '${socket.__name__}' success!`)
 
 				let clientHandler = this.clientsHandlers[socket.__name__]
 				if (clientHandler) {
@@ -56,8 +54,8 @@ class Microservice {
 					} else {
 						clientHandler.events.data.map(event => {
 							if (event.type === result.type) {
-								if(result.clientHash) {
-									 event.callback(new ReplyHandler(result, socket))
+								if (result.clientHash) {
+									event.callback(new ReplyHandler(result, socket))
 								} else {
 									event.callback({ result: result.data })
 								}
@@ -84,7 +82,7 @@ class Microservice {
 	}
 
 	send (name, type, data = {}, callback = null) {
-		if(!this.clientsHandlers[name]) throw new Error(`Client '${name}' not found`)
+		if (!this.clientsHandlers[name]) throw new Error(`ClientService '${name}' not found`)
 		this.clientsHandlers[name].send(type, data, callback)
 	}
 
@@ -93,7 +91,7 @@ class Microservice {
 			this.clientsHandlers[name] = new ConnectHandler(name)
 		}
 
-		if(callback) {
+		if (callback) {
 			callback(this.clientsHandlers[name])
 			return this
 		} else {
@@ -139,8 +137,8 @@ class ConnectHandler {
 	}
 
 	send (type, data, callback) {
-		if(!this.socket) {
-			console.error(`Dont set socket in '${this.name}'`)
+		if (!this.socket) {
+			console.error(`ClientService '${this.name}' is not set socket`)
 		}
 
 		let send = {
@@ -148,7 +146,7 @@ class ConnectHandler {
 			data
 		}
 
-		if(callback) {
+		if (callback) {
 			let serverHash = this.getHash()
 
 			this.events.send.push({
@@ -164,7 +162,7 @@ class ConnectHandler {
 		return this
 	}
 
-	getHash (min = 10000000, max = 90000000) {
+	getHash (min = 10000000, max = 99999999) {
 	  return Math.floor(Math.random() * (max - min)) + min;
 	}
 }
@@ -186,5 +184,3 @@ class ReplyHandler {
 		}))
 	}
 }
-
-module.exports = Microservice
