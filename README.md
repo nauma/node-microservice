@@ -16,9 +16,9 @@ $ npm i @nauma/node-microservice --save
 const ms = require('@nauma/node-microservice')
 ```
 
-### create Microservice(server)
+### create Serverservice(server)
 ```js
-const databaseServer = new ms.Microservice('databaseServer', { host: 'localhost', port: 9250 })
+const databaseServer = new ms.Serverservice('databaseServer', { host: 'localhost', port: 9250 })
 ```
 
 ### create Clientservice(client)
@@ -89,7 +89,7 @@ restServer.get('databaseServer', database => {
 })
 
 
-const databaseServer = new ms.Microservice('databaseServer', { host: '0.0.0.0', port: 9250 })
+const databaseServer = new ms.Serverservice('databaseServer', { host: '0.0.0.0', port: 9250 })
 
 databaseServer.get('restServer', server => {
   server.open(() => {
