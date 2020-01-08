@@ -1,6 +1,6 @@
 {
   "name": "@nauma/node-microservice",
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "Using microservices in node.js",
   "main": "dist/index.js",
   "scripts": {
